@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-2^(h58v!qs(w)zoshu19cz&j8n0fapce2hfvht^1x22lt2)mm='
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     ".up.railway.app",
@@ -28,6 +28,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+      'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
 
@@ -97,6 +98,7 @@ USE_TZ = False
 
 
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [
     BASE_DIR / "infrastructure/static",
 ]
