@@ -1,0 +1,79 @@
+{% extends "base/base.html" %}
+
+{% block title %}Nuevo Vehículo - ParkPlace{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-container { max-width: 500px; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); margin: 40px auto; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #1e293b; font-size: 14px; }
+    .form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 6px; box-sizing: border-box; font-size: 14px; color: #334155; }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: #1e40af; box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1); }
+    .btn-save { background: #0f172a; color: white; width: 100%; padding: 12px; margin-top: 10px; font-size: 15px; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; }
+    .btn-save:hover { background: #1e293b; }
+    .btn-back { color: #64748b; display: inline-block; text-decoration: none; font-weight: 500; font-size: 14px; margin-bottom: 10px; }
+    
+    /* Error styling */
+    .error-alert { margin-top: 20px; color: #b91c1c; background: #fee2e2; padding: 12px; border-radius: 6px; font-size: 14px; border-left: 4px solid #b91c1c; font-weight: 500; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 0 auto;">
+    <a href="/vehiculos/" class="btn-back">← Volver al listado</a>
+</div>
+
+<div class="form-container">
+    <h2 style="margin-top: 0; color: #0f172a; font-size: 22px; margin-bottom: 25px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px;">
+        Registrar Vehículo
+    </h2>
+    
+    <form method="POST" autocomplete="off">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="plate">Placa del Vehículo</label>
+            <input type="text" name="plate" id="plate" required 
+                   placeholder="Ej. ABC123" maxlength="6" 
+                   style="text-transform: uppercase;">
+        </div>
+
+        <div class="form-group">
+            <label>Tipo de Vehículo</label>
+            <select name="type" required>
+                <option value="CAR">Automóvil (Carro)</option>
+                <option value="MOTORCYCLE">Motocicleta (Moto)</option>
+                <option value="BICYCLE">Bicicleta</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Propietario</label>
+            <select name="client_id" required>
+                <option value="" disabled selected>Seleccione el dueño...</option>
+                {% for client in clients %}
+                    <option value="{{ client.id }}">
+                        {{ client.name }} {% if client.client_type == "SENA" %}(SENA 🎓){% endif %}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit" class="btn-save">Guardar Vehículo</button>
+
+        {% if error %}
+        <div class="error-alert">
+             ⚠️ {{ error }}
+        </div>
+        {% endif %}
+    </form>
+</div>
+
+<script>
+
+    const plateInput = document.getElementById('plate');
+    plateInput.addEventListener('input', function() {
+        this.value = this.value.toUpperCase().replace(/\s/g, '');
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends "base/base.html" %}
+
+{% block title %}Empleados - ParkPlace{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Estructura y botones consistentes con Clientes */
+    .header-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+    .btn { padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: 600; cursor: pointer; border: none; display: inline-block; transition: 0.3s; }
+    
+    .btn-primary { background: #0f172a; color: white; border: 1px solid #1e293b; }
+    .btn-primary:hover { background: #1e293b; }
+
+    /* Botones de acción en tabla */
+    .btn-edit { background: #1e40af; color: white; padding: 5px 12px; font-size: 12px; text-decoration: none; border-radius: 4px; }
+    .btn-edit:hover { background: #1e3a8a; }
+
+    .btn-delete { 
+        color: #94a3b8; 
+        padding: 5px 10px; 
+        font-size: 11px; 
+        background: transparent;
+        border: 1px solid #e2e8f0;
+        text-decoration: none;
+        border-radius: 4px;
+    }
+    .btn-delete:hover { 
+        background: #fee2e2; 
+        color: #dc2626; 
+        border-color: #fecaca; 
+    }
+    
+    /* Estilo de Tabla ParkPlace */
+    table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); }
+    th { background: #f8fafc; color: #64748b; text-align: left; padding: 15px; border-bottom: 1px solid #e2e8f0; font-size: 13px; text-transform: uppercase; }
+    td { padding: 14px 15px; border-bottom: 1px solid #f1f5f9; color: #334155; font-size: 14px; }
+    tr:hover { background-color: #f8fafc; }
+
+    .badge-role { 
+        background: #f1f5f9; 
+        color: #475569; 
+        padding: 4px 10px; 
+        border-radius: 12px; 
+        font-size: 10px; 
+        font-weight: bold; 
+        display: inline-flex; 
+        align-items: center; 
+        border: 1px solid #e2e8f0;
+        text-transform: uppercase;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="header-actions">
+    <h1 style="color: #0f172a; margin: 0;">Gestión de Empleados</h1>
+    <a href="{% url 'create_employee' %}" class="btn btn-primary">+ Nuevo Empleado</a>
+</div>
+
+{# Se eliminó el buscador a petición del usuario #}
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Usuario</th>
+            <th>Teléfono</th>
+            <th>Rol</th>
+            <th style="text-align: center;">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for e in employees %}
+        <tr>
+            <td style="color: #94a3b8; font-weight: 600;">#{{ e.id }}</td>
+            <td><strong>{{ e.name }}</strong></td>
+            <td><code style="color: #64748b;">@{{ e.username }}</code></td>
+            <td>{{ e.phone|default:"-" }}</td>
+            <td>
+                <span class="badge-role">
+                    {{ e.role }}
+                </span>
+            </td>
+            <td style="text-align: center;">
+                <a href="{% url 'update_employee' e.id %}" class="btn btn-edit">Editar</a>
+                <a href="{% url 'delete_employee' e.id %}" class="btn btn-delete" onclick="return confirm('¿Eliminar empleado?')">Eliminar</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6" style="text-align: center; padding: 40px; color: #94a3b8;">
+                No hay empleados registrados actualmente.
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

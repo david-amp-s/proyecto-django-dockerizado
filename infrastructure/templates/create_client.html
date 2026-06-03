@@ -1,0 +1,145 @@
+{% extends "base/base.html" %}
+
+{% block title %}Nuevo Cliente - ParkPlace{% endblock %}
+
+{% block extra_css %}
+<style>
+
+    .form-container { 
+        max-width: 500px; 
+        background: white; 
+        padding: 30px; 
+        border-radius: 12px; 
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); 
+        margin: 40px auto; 
+    }
+    
+    .form-group { margin-bottom: 20px; }
+    
+    .form-group label { 
+        display: block; 
+        margin-bottom: 8px; 
+        font-weight: 600; 
+        color: #1e293b; 
+        font-size: 14px;
+    }
+    
+    .form-group input, .form-group select { 
+        width: 100%; 
+        padding: 10px 12px; 
+        border: 1px solid #e2e8f0; 
+        border-radius: 6px; 
+        box-sizing: border-box; 
+        font-size: 14px; 
+        color: #334155;
+        transition: border-color 0.2s;
+    }
+
+    .form-group input:focus, .form-group select:focus {
+        outline: none;
+        border-color: #1e40af;
+        box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+    }
+
+    /* Estilo para errores */
+    .error-message {
+        color: #dc2626;
+        font-size: 12px;
+        margin-top: 4px;
+        font-weight: 500;
+    }
+    
+    .input-error {
+        border-color: #dc2626 !important;
+        background-color: #fef2f2;
+    }
+
+    .btn-save { 
+        background: #0f172a; 
+        color: white; 
+        width: 100%; 
+        padding: 12px;
+        margin-top: 10px; 
+        font-size: 15px; 
+        font-weight: 600;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.2s; 
+    }
+    
+    .btn-save:hover { background: #1e293b; }
+
+    .btn-back { 
+        color: #64748b; 
+        display: inline-block; 
+        text-decoration: none; 
+        font-weight: 500; 
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+    .btn-back:hover { color: #0f172a; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 0 auto;">
+    <a href="/clientes/" class="btn-back">← Volver al listado de clientes</a>
+</div>
+
+<div class="form-container">
+    <h2 style="margin-top: 0; color: #0f172a; font-size: 22px; margin-bottom: 25px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px;">
+        Registrar Nuevo Cliente
+    </h2>
+    
+    <form method="POST">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label>Nombre Completo</label>
+            <input type="text" name="name" 
+                   class="{% if form.name.errors %}input-error{% endif %}"
+                   value="{{ form.name.value|default:'' }}" 
+                   required placeholder="Ej. Juan Pérez">
+            {% if form.name.errors %}
+                <div class="error-message">{{ form.name.errors.0 }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label>Tipo de Cliente</label>
+            <select name="client_type">
+                {% for value, label in form.fields.client_type.choices %}
+                    <option value="{{ value }}" {% if form.client_type.value == value %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Teléfono de Contacto</label>
+            <input type="text" name="phone" 
+                   class="{% if form.phone.errors %}input-error{% endif %}"
+                   value="{{ form.phone.value|default:'' }}" 
+                   required placeholder="Ej. 3001234567">
+            {% if form.phone.errors %}
+                <div class="error-message">{{ form.phone.errors.0 }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label>Correo Electrónico (Opcional)</label>
+            <input type="email" name="email" 
+                   class="{% if form.email.errors %}input-error{% endif %}"
+                   value="{{ form.email.value|default:'' }}" 
+                   placeholder="correo@ejemplo.com">
+            {% if form.email.errors %}
+                <div class="error-message">{{ form.email.errors.0 }}</div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn-save">Guardar Cliente</button>
+    </form>
+</div>
+{% endblock %}
