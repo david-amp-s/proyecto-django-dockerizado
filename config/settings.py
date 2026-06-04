@@ -114,3 +114,7 @@ EMAIL_HOST_USER = 'stiveeen08@gmail.com'
 EMAIL_HOST_PASSWORD = 'ttrh wzof igsd aumu'
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.up.railway.app",
+]
