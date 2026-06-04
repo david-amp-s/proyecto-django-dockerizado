@@ -17,4 +17,4 @@ COPY . .
 # Genera los archivos estáticos durante el build
 RUN python manage.py collectstatic --noinput
 
-CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:$PORT"]
+CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
